@@ -47,7 +47,7 @@
   <div class="toolbar">
     <button data-v="iso">Iso (0)</button><button data-v="front">Front (1)</button><button data-v="top">Top (2)</button>
     <button data-v="side">Right (3)</button><button data-v="back">Back (4)</button><button data-v="left">Left (6)</button>
-    <button id="fit">Fit (F)</button><button id="spin">Auto-rotate</button><button id="encl" class="on">Enclosure</button>
+    <button id="fit">Fit (F)</button><button id="spin">Auto-rotate</button><button id="encl">Enclosure</button>
     <button id="cables" class="on">Cables</button><button id="wire">Wireframe</button><button id="measBtn">Measure (M)</button>
     <button id="snapBtn" class="on">Snap to corner</button><button id="clearM">Clear measures</button><button id="helpBtn">How to use</button>
   </div>
@@ -189,10 +189,11 @@ function setView(k) { const d = new THREE.Vector3(...VIEWS[k]).normalize(), dist
 document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => setView(b.dataset.v));
 document.getElementById('fit').onclick = () => fitTo(meshes.filter(m => m.visible));
 const tog = (id, fn) => { const b = document.getElementById(id); b.onclick = () => { b.classList.toggle('on'); fn(b.classList.contains('on')); }; };
-let encl = true, cables = true;
+let encl = false, cables = true;
 tog('spin', on => controls.autoRotate = on); controls.autoRotateSpeed = 1.5;
 tog('encl', on => { encl = on; if (!isolated) showAll(); });
 tog('cables', on => { cables = on; if (!isolated) showAll(); });
+showAll();
 tog('wire', on => meshes.forEach(m => m.material.wireframe = on));
 let snap = true; tog('snapBtn', on => snap = on);
 document.getElementById('helpBtn').onclick = () => document.getElementById('help').style.display = 'block';
