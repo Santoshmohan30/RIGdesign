@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rig 05 Viewer</title>
 <style>
+  html { height:100%; }
   :root { --bg:#f4f5f7; --panel:#ffffff; --ink:#1d2330; --muted:#677084; --line:#dde1e8; --accent:#2f6fde; --comm:#2f6fde; --cust:#d9822b; --lab:#7a5af8; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#14171d; --panel:#1c2028; --ink:#e7eaf0; --muted:#9aa3b5; --line:#2c323d; } }
   :root[data-theme="dark"] { --bg:#14171d; --panel:#1c2028; --ink:#e7eaf0; --muted:#9aa3b5; --line:#2c323d; }
   * { box-sizing:border-box; }
-  body { margin:0; font:13px/1.4 -apple-system, system-ui, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); height:100vh; display:grid; grid-template-columns:300px 1fr 320px; overflow:hidden; }
+  body { margin:0; font:13px/1.4 -apple-system, system-ui, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); height:100%; display:grid; grid-template-columns:300px 1fr 320px; overflow:hidden; }
   aside { background:var(--panel); border-right:1px solid var(--line); overflow:auto; padding:10px; }
   aside.right { border-right:none; border-left:1px solid var(--line); }
   h1 { font-size:15px; margin:2px 0 8px; } h2 { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:14px 0 6px; }
@@ -32,7 +33,7 @@
   #help { position:absolute; inset:60px 40px auto auto; width:360px; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; display:none; box-shadow:0 6px 30px rgba(0,0,0,.2); }
   kbd { border:1px solid var(--line); border-bottom-width:2px; border-radius:4px; padding:0 4px; font-size:11px; }
   #meas { font-variant-numeric:tabular-nums; }
-  @media (max-width: 900px) { body { grid-template-columns:1fr; grid-template-rows:40vh 1fr auto; } aside { max-height:30vh; } }
+  @media (max-width: 900px) { body { grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; overflow-x:hidden; overflow-y:auto; height:auto; -webkit-text-size-adjust:100%; } #view { order:-1; height:62vh; height:62svh; min-width:0; overflow:hidden; touch-action:none; } aside, aside.right { min-width:0; max-height:none; border:none; border-top:1px solid var(--line); padding-left:max(12px, env(safe-area-inset-left)); padding-right:max(12px, env(safe-area-inset-right)); } aside.right { padding-bottom:max(16px, env(safe-area-inset-bottom)); } .toolbar { top:max(8px, env(safe-area-inset-top)); left:max(8px, env(safe-area-inset-left)); right:max(8px, env(safe-area-inset-right)); gap:4px; flex-wrap:nowrap; overflow-x:auto; pointer-events:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; } .toolbar button { padding:7px 10px; font-size:13px; flex:none; } #help { inset:50px 8px auto 8px; width:auto; max-height:70%; overflow:auto; } .hint { display:none; } input[type=search] { font-size:16px; } }
 </style>
 </head>
 <body>
