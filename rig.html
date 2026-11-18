@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mouse Face Rig Designs</title>
+<style>
+:root{--bg:#eef0f3;--card:#fff;--ink:#1b2130;--muted:#5f687a;--line:#d6dbe3;--accent:#2a63d4;--on:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#13161c;--card:#1c2028;--ink:#e8ebf1;--muted:#9aa3b5;--line:#2d333e;--accent:#6e9cf0;--on:#0d1220}}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,system-ui,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+header{padding:max(10px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) 10px max(14px,env(safe-area-inset-left));background:var(--card);border-bottom:1px solid var(--line);display:grid;gap:8px}
+h1{margin:0;font-size:18px}
+.row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.row button{flex:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px 12px;border-radius:999px;font:600 14px/1 inherit;font-family:inherit;cursor:pointer}
+.row button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on)}
+.note{color:var(--muted);font-size:13px;margin:0}
+main{flex:1;min-height:0;position:relative}
+iframe{border:0;width:100%;height:100%;display:block;background:var(--bg)}
+#draw{height:100%;overflow:auto;padding:14px max(14px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:14px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+figure img{width:100%;display:block;background:#fff;cursor:zoom-in}
+figcaption{padding:8px 10px;font-weight:600;font-size:14px}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:9;overflow:auto;padding:max(44px,env(safe-area-inset-top)) 0 20px}
+#lb img{width:100%;max-width:2000px;display:block;margin:0 auto;touch-action:pinch-zoom}
+#lb button{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));font:700 16px system-ui;padding:8px 14px;border-radius:999px;border:0;background:#fff;color:#000}
+</style></head><body>
+<header>
+  <h1>Head-fixed mouse face rig — designs</h1>
+  <div class="row" id="models"></div>
+  <div class="row" id="modes"><button data-m="3d" aria-pressed="true">3D model</button><button data-m="draw" aria-pressed="false">Engineering drawings</button><button data-m="pdf" aria-pressed="false">PDF (23 pages)</button></div>
+  <p class="note" id="desc"></p>
+</header>
+<main><iframe id="frame" title="3D model"></iframe><div id="draw" hidden><div class="grid" id="grid"></div></div></main>
+<div id="lb"><button id="lbx">Close</button><img id="lbimg" alt=""></div>
+<script>
+const DRAW={"rig05": [["rig05_iso.jpg", "3D view"], ["rig05_top.jpg", "Top view"], ["rig05_front.jpg", "Front view"], ["rig05_side.jpg", "Side view"], ["rig05_iso_enclosure.jpg", "With enclosure"], ["rig05_zoom_headclamp.jpg", "Head clamp close-up"], ["rig05_zoom_lickometer.jpg", "Lickometer close-up"], ["rig05_zoom_camera_left.jpg", "Camera holder close-up"]], "p07": [["p07_01.jpg", "Cover"], ["p07_02.jpg", "Baseplate"], ["p07_03.jpg", "Treadmill assembled"], ["p07_04.jpg", "Treadmill part by part"], ["p07_05.jpg", "3D front"], ["p07_06.jpg", "3D back"], ["p07_07.jpg", "Top view"], ["p07_08.jpg", "Front view"], ["p07_09.jpg", "Left side"], ["p07_10.jpg", "Right side"], ["p07_11.jpg", "Back view"], ["p07_12.jpg", "Head holder"], ["p07_13.jpg", "Camera"], ["p07_14.jpg", "Camera mount + angles"], ["p07_15.jpg", "Lickometer"], ["p07_16.jpg", "IR light"], ["p07_17.jpg", "Cables"], ["p07_18.jpg", "Everything on one page"], ["p07_19.jpg", "What we make"], ["p07_20.jpg", "All parts 1"], ["p07_21.jpg", "All parts 2"], ["p07_22.jpg", "All parts 3"], ["p07_23.jpg", "To buy"]], "p08": [["p08_1_top.jpg", "Top view + dimensions"], ["p08_2_front.jpg", "Front view + heights"], ["p08_3_side.jpg", "Side view"], ["p08_iso_front.jpg", "3D front"], ["p08_iso_back.jpg", "3D back"], ["p08_back.jpg", "Back view"]], "p09": [["p09_1_top.jpg", "Top view + dimensions"], ["p09_2_front.jpg", "Front view + heights"], ["p09_3_side.jpg", "Side view"], ["p09_iso_front.jpg", "3D front"], ["p09_iso_back.jpg", "3D back"], ["p09_back.jpg", "Back view"]]};
+const MODELS=[
+ {id:"rig05",name:"Rig 05 — 8-inch ball",page:"index.html",desc:"Original full setup: 8-inch ball on air, side head tower, 3 cameras on rails, lickometer from below, IR, enclosure."},
+ {id:"p08",name:"Rig 05 + flat disc",page:"disc.html",desc:"Rig 05 with the ball replaced by a Ø200 rotating disc (top at 222.2 mm); straight headbar on 2 posts; lickometer from the front-right."},
+ {id:"p09",name:"Rig 05 + upright wheel",page:"wheel.html",desc:"Rig 05 with a Ø200 x 50 upright running wheel, 2 mm rubber tread, axle at 122.2 mm; straight headbar on 2 posts."},
+ {id:"p07",name:"Prototype 07",page:"prototype07.html",desc:"Ball version with post camera mounts and the head tower behind the ball. Full drawing set with every dimension and the buy list."}];
+let cur=MODELS[0], mode="3d";
+const $=s=>document.querySelector(s), frame=$("#frame"), draw=$("#draw"), grid=$("#grid");
+MODELS.forEach(m=>{const b=document.createElement("button");b.textContent=m.name;b.dataset.id=m.id;b.onclick=()=>{cur=m;render()};$("#models").appendChild(b)});
+document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{ if(b.dataset.m==="pdf"){location.href="Rig_Prototype_FULL.pdf";return;} mode=b.dataset.m;render()});
+function render(){
+  document.querySelectorAll("#models button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===cur.id));
+  document.querySelectorAll("#modes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===mode));
+  $("#desc").textContent=cur.desc;
+  if(mode==="3d"){draw.hidden=true;frame.hidden=false;if(!frame.src.endsWith(cur.page))frame.src=cur.page;}
+  else{frame.hidden=true;draw.hidden=false;grid.innerHTML="";(DRAW[cur.id]||[]).forEach(([f,t])=>{const fg=document.createElement("figure");fg.innerHTML=`<img loading="lazy" src="drawings/${f}" alt="${t}"><figcaption>${t}</figcaption>`;fg.querySelector("img").onclick=()=>{$("#lbimg").src="drawings/"+f;$("#lb").style.display="block"};grid.appendChild(fg)});draw.scrollTop=0;}
+  try{history.replaceState(null,"","#"+cur.id+"-"+mode)}catch(e){}
+}
+$("#lbx").onclick=()=>{$("#lb").style.display="none"};
+const h=(location.hash||"").slice(1).split("-"); const f=MODELS.find(m=>m.id===h[0]); if(f)cur=f; if(h[1]==="draw")mode="draw";
+render();
+</script></body></html>
