@@ -30,6 +30,11 @@
   kbd { border:1px solid var(--line); border-bottom-width:2px; border-radius:4px; padding:0 4px; font-size:11px; }
   #meas { font-variant-numeric:tabular-nums; }
   @media (max-width: 900px) { body { grid-template-columns:minmax(0,1fr); overflow-x:hidden; grid-template-rows:62vh auto auto; overflow:auto; height:auto; } #view { order:-1; height:62vh; min-width:0; overflow:hidden; } aside, aside.right { min-width:0; } canvas { max-width:100%; } aside, aside.right { max-height:none; border:none; border-top:1px solid var(--line); padding-left:max(10px, env(safe-area-inset-left, 0px)); padding-right:max(10px, env(safe-area-inset-right, 0px)); } .toolbar { left:max(8px, env(safe-area-inset-left, 0px)); right:max(8px, env(safe-area-inset-right, 0px)); } .toolbar button { padding:5px 8px; font-size:11px; } #help { inset:50px 8px auto 8px; width:auto; } .hint { display:none; } }
+
+  #zoomPad { position:absolute; right:max(12px, env(safe-area-inset-right)); bottom:max(12px, env(safe-area-inset-bottom)); display:flex; flex-direction:column; gap:6px; z-index:5; }
+  #zoomPad button { width:44px; height:44px; font-size:24px; font-weight:700; line-height:1; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:10px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.18); touch-action:manipulation; }
+  #zoomPad button:active { background:var(--accent); color:#fff; }
+  #zoomPad button.small { font-size:12px; font-weight:600; }
 </style></head><body>
 
 <aside>
@@ -39,6 +44,7 @@
   <div id="tree"></div>
 </aside>
 <main id="view">
+  <div id="zoomPad"><button id="zIn" title="Zoom in (+)">+</button><button id="zOut" title="Zoom out (-)">&minus;</button><button id="zFit" class="small" title="Fit (F)">Fit</button></div>
   <div class="toolbar">
     <button data-v="iso">Iso (0)</button><button data-v="front">Front (1)</button><button data-v="top">Top (2)</button>
     <button data-v="side">Right (3)</button><button data-v="back">Back (4)</button><button data-v="left">Left (6)</button>
@@ -227,6 +233,14 @@ addEventListener('keydown', e => { if (e.target.tagName === 'INPUT') return; con
 function resize() { const w = view.clientWidth, h = view.clientHeight; renderer.setSize(w, h); labels.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
 camera.position.set(600, -600, 500); controls.target.set(0, 0, 120); fitTo(meshes);
+function zoomBy(f) { const off = camera.position.clone().sub(controls.target); const d = Math.min(5000, Math.max(20, off.length() * f)); camera.position.copy(controls.target.clone().add(off.setLength(d))); controls.update(); }
+let zTimer = null;
+function holdZoom(id, f) { const b = document.getElementById(id); const stop = () => { clearInterval(zTimer); zTimer = null; };
+  b.addEventListener('pointerdown', e => { e.preventDefault(); zoomBy(f); stop(); zTimer = setInterval(() => zoomBy(f), 90); });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => b.addEventListener(t, stop)); }
+holdZoom('zIn', 0.85); holdZoom('zOut', 1 / 0.85);
+document.getElementById('zFit').addEventListener('click', () => document.getElementById('fit').click());
+addEventListener('keydown', e => { if (e.target.tagName === 'INPUT') return; if (e.key === '+' || e.key === '=') zoomBy(0.85); else if (e.key === '-' || e.key === '_') zoomBy(1 / 0.85); });
 renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); labels.render(scene, camera); });
 </script>
 </body></html>
