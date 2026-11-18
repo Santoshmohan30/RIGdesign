@@ -152,8 +152,8 @@ function select(m, focus) {
   document.getElementById('info').innerHTML = `<div style="font-weight:700;font-size:14px;color:var(--ink)">${p.n}</div>
    <div style="margin:4px 0"><span class="badge ${p.kind}">${p.kind}</span></div><table>
    <tr><td>Module</td><td>${p.m}</td></tr><tr><td>Source</td><td>${p.src}</td></tr><tr><td>Material</td><td>${p.mat}</td></tr>
-   <tr><td>Size X × Y × Z</td><td><b>${L} × ${W} × ${H} mm</b></td></tr>
-   <tr><td>X range (frontâback)</td><td>${b[0].toFixed(1)} → ${b[3].toFixed(1)}</td></tr><tr><td>Y range (leftâright)</td><td>${b[1].toFixed(1)} → ${b[4].toFixed(1)}</td></tr>
+   <tr><td>L × W × H (X × Y × Z)</td><td><b>${L} × ${W} × ${H} mm</b></td></tr>
+   <tr><td>X range (front–back)</td><td>${b[0].toFixed(1)} → ${b[3].toFixed(1)}</td></tr><tr><td>Y range (left–right)</td><td>${b[1].toFixed(1)} → ${b[4].toFixed(1)}</td></tr>
    <tr><td>Z range (height)</td><td>${b[2].toFixed(1)} → ${b[5].toFixed(1)}</td></tr><tr><td>Volume</td><td>${(p.vol / 1000).toFixed(2)} cm³</td></tr>
    <tr><td>Surface area</td><td>${(p.area / 100).toFixed(1)} cm²</td></tr><tr><td>Mass (est.)</td><td>${p.mass || '-'}</td></tr></table>`;
   showHoles(p.n === 'BP_Plate'); if (isolated) isolate(); if (focus && isolated) fitTo([m]);
